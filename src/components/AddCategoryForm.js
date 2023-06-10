@@ -8,35 +8,45 @@ export default function AddCategoryForm() {
   const context = useContext(Context);
   const { addCategory } = context;
 
-  const [categoryID, setID] = useState("");
+  const [categoryID, setCategoryID] = useState(0);
   const [categoryName, setName] = useState("");
   const [categoryDescription, setDescription] = useState("");
 
-  const handleChange1 = (e, { value }) => setName({ value });
-  const handleChange2 = (e, { value }) => setDescription({ value });
+  const handleChange1 = (e) => {
+    const value = parseInt(e.target.value);
+    if (!isNaN(value)) {
+      setCategoryID(value);
+    }
+  };
+
+  const handleChange2 = (e, { value }) => setName(value);
+  const handleChange3 = (e, { value }) => setDescription(value);
 
   const handleSubmit = () => {
     const category = {
-      id: categoryID.vale,
-      name: categoryName.value,
-      description : categoryDescription.value,
+      categoryID: categoryID,
+      categoryName: categoryName,
+      categoryDescription: categoryDescription
     };
-
-    addCategory(category);
+    console.log("Submitting category:", category); // Debug statement
+    const jsonData = JSON.stringify(category);
+    console.log("Submitting category:", jsonData);
+    addCategory(jsonData);
   };
 
   return (
-    <Modal trigger={<Button fluid primary>Add new Category</Button>}>
+    <Modal trigger={<Button primary>Add new Category</Button>}>
       <Modal.Header>Add new Category</Modal.Header>
       <Modal.Content>
         <Form onSubmit={handleSubmit}>
-          <Form.Input
-            name="categoryName"
-            label="Name"
-            placeholder="Category name"
-            onChange={handleChange1}
-            value={categoryName.value}
-          />
+        <Form.Input
+        type="number"
+        name="categoryID"
+        label="Number"
+        placeholder="Category ID"
+        onChange={handleChange1}
+        value={categoryID}
+      />
            <Form.Input
             name="categoryDescription"
             label="Description"
